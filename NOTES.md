@@ -48,3 +48,14 @@ ground.
 ## Damage
 `func_800E4530` takes damage off a gun buddy (+0x3C health). btgarecomp
 hooks it for the Gun Buddies Are Invulnerable cheat, so mods can't.
+
+## Room for a bigger type
+`func_800E29A4` checks the type's own box (stats +0x2C: half its size) on
+the collision map, the deploying tank included. A normal deploy's spot is
+worked out for type 5 (half size 0x24), just clear of the tank, so type 4
+(0x64) overlaps the tank there and is refused: the weapon has already played
+its sound and used its ammo by then, and nothing comes down. The mod moves a
+bigger type further from the tank (heading - 0x8000 points from the tank to
+the spot) by the difference plus 8, up to three times, and puts down the
+game's own type if it still doesn't fit. Sizes: types 0, 2, 5: 0x24; type 1:
+0x1E; type 3: 0x05; type 4: 0x64.

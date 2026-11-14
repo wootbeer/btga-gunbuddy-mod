@@ -1,4 +1,8 @@
-## Gun Buddy Select 0.1.0
+## Gun Buddy Select 0.1.1
+
+**Fix:** a bigger gun buddy than the usual one (Type 4, and Type 4 from Random) didn't fit at the usual spot right behind your tank, so the deploy used your ammo and put nothing down. It now goes further back, and if there's still no room you get the usual gun buddy.
+
+### 0.1.0
 
 First version. Pick which gun buddy a normal deploy puts down (the game's own, any of the four that A+B mixes, or Random), and optionally make A+B put down your pick too.
 

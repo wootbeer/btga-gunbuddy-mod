@@ -85,6 +85,44 @@ static s32 chosen_type(s32 type, u32 gang) {
     }
 }
 
+// A spot for a gun buddy of `type` where the game picked one for `game_type`.
+// func_800E29A4 checks the type's own box (stats +0x2C), so a bigger type
+// than the game's can overlap the tank that put it down (type 4's box is
+// 100 across to type 5's 36). A normal deploy's spot is the tank's position
+// plus its heading's direction times a distance, and the gun buddy faces the
+// other way (heading + 0x8000). So heading - 0x8000 points from the tank to
+// the spot, and a bigger type is moved further out along it. Grid spots are
+// only tried where they are. Returns pos, `out` with the moved spot, or
+// NULL if there's no room.
+static f32* find_room(s32 type, s32 game_type, f32* pos, f32* out, s32 heading, s32 layer) {
+    s32 grow, step;
+    f32 dx, dz;
+
+    if (func_800E29A4(type, pos, heading, layer)) {
+        return pos;
+    }
+    if (game_type != GUNBUDDY_TYPE_DEPLOY) {
+        return NULL;
+    }
+
+    grow = GUNBUDDY_STAT_HALF_SIZE(type) - GUNBUDDY_STAT_HALF_SIZE(game_type);
+    if (grow < 0) {
+        grow = 0;
+    }
+    dx = func_8009D4B0((heading - 0x8000) & 0xFFFF);
+    dz = func_8009D510((heading - 0x8000) & 0xFFFF);
+    for (step = 1; step <= 3; step++) {
+        f32 d = (f32)((grow + 8) * step);
+        out[0] = pos[0] + dx * d;
+        out[1] = pos[1] + dz * d;
+        out[2] = pos[2];
+        if (func_800E29A4(type, out, heading, layer)) {
+            return out;
+        }
+    }
+    return NULL;
+}
+
 // Puts down a gun buddy of `type` at pos (x, z, y), facing `heading`.
 // Type 1 is made right away; the others first drop in from above, as a
 // type 0x29 object that func_800E5164 turns into the gun buddy about a
@@ -95,13 +133,25 @@ RECOMP_PATCH s32 func_800E4F3C(s32 type, f32* pos, s32 heading, s32 layer, s32 g
     u8* drop;
     s32 half;
     f32 top;
+    f32* game_pos = pos;
+    f32 moved[3];
 
     type &= 0xFF;
     heading &= 0xFFFF;
     layer &= 0xFF;
     gang &= 0xFF;
 
-    type = chosen_type(type, gang);
+    {
+        s32 game_type = type;
+        type = chosen_type(type, gang);
+        if (type != game_type) {
+            pos = find_room(type, game_type, pos, moved, heading, layer);
+            if (pos == NULL) {
+                type = game_type; // no room for the pick: the game's own
+                pos = game_pos;
+            }
+        }
+    }
 
     if (!func_800E29A4(type, pos, heading, layer)) {
         return 0;
