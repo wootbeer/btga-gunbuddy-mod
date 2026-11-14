@@ -32,11 +32,11 @@ types (the table runs into the level names after type 5). Model ids at
 | 0 | 0x98, 0x99, 0x9A | A+B mix |
 | 1 | 0x71, 0x72, 0x73 | A+B mix; made at once (no drop) |
 | 2 | 0xB3, 0xB4 | A+B mix |
-| 3 | 0xCA | two put on a tank when it's made, if its tank type has flag 0x80 (0x8008B55C) |
+| 3 | 0xCA | two put on a tank when it's made, if its tank type has flag 0x80 (0x8008B55C): only the three boss tanks (types 12-14) |
 | 4 | 0xCE | A+B mix; most health |
 | 5 | 0x98, 0x99, 0x9A | normal deploy (type 0's models, other stats) |
 
-Not yet checked in game: which type is the double-barreled one and which one
+Checked in game: Type 0 looks like the normal one (same models). Types 1 and 2 look different. Not yet checked: which type is the double-barreled one and which one
 hides. Guesses from the code: type 1 hides (it's made at once, so it can't
 drop in, and it has extra timing fields at +0x30); type 4 is the big
 four-barrel one (one model and two muzzle offsets at +0x3C, which the game
@@ -56,8 +56,12 @@ worked out for type 5 (half size 0x24), just clear of the tank, so type 4
 (0x64) overlaps the tank there and is refused: the weapon has already played
 its sound and used its ammo by then, and nothing comes down. The mod moves a
 bigger type further from the tank (heading - 0x8000 points from the tank to
-the spot) by the difference plus 8, up to three times, and puts down the
-game's own type if it still doesn't fit. Sizes: types 0, 2, 5: 0x24; type 1:
+the spot): rings of (difference + 16) out to 8 rings, straight back and at
+about 34 and 68 degrees to each side. If none fits it puts down the game's
+own type and tells the player (0.1.1 only went 3 steps straight back, which
+wasn't enough: Type 4 came out as the normal gun buddy every time).
+The room check is func_800B205C (a box: half size each way, on the
+heading) then func_800B3748 with mask 0xE4550F, which must find nothing. Sizes: types 0, 2, 5: 0x24; type 1:
 0x1E; type 3: 0x05; type 4: 0x64.
 
 ## Controllers and messages (the cycle button)

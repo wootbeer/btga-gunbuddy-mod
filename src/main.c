@@ -170,12 +170,14 @@ static s32 chosen_type(s32 type, u32 gang) {
 // 100 across to type 5's 36). A normal deploy's spot is the tank's position
 // plus its heading's direction times a distance, and the gun buddy faces the
 // other way (heading + 0x8000). So heading - 0x8000 points from the tank to
-// the spot, and a bigger type is moved further out along it. Grid spots are
-// only tried where they are. Returns pos, `out` with the moved spot, or
-// NULL if there's no room.
+// the spot, and a bigger type is tried further out along it and at angles
+// to either side. Grid spots are only tried where they are. Returns pos,
+// `out` with the moved spot, or NULL if there's no room.
 static f32* find_room(s32 type, s32 game_type, f32* pos, f32* out, s32 heading, s32 layer) {
-    s32 grow, step;
-    f32 dx, dz;
+    // Directions to try, as turns from straight out (behind the tank), and
+    // how far: rings of (grow + 16) each, out to 8 rings.
+    static const s16 turns[] = { 0, 0x1800, -0x1800, 0x3000, -0x3000 };
+    s32 grow, ring, t;
 
     if (func_800E29A4(type, pos, heading, layer)) {
         return pos;
@@ -188,15 +190,16 @@ static f32* find_room(s32 type, s32 game_type, f32* pos, f32* out, s32 heading, 
     if (grow < 0) {
         grow = 0;
     }
-    dx = func_8009D4B0((heading - 0x8000) & 0xFFFF);
-    dz = func_8009D510((heading - 0x8000) & 0xFFFF);
-    for (step = 1; step <= 3; step++) {
-        f32 d = (f32)((grow + 8) * step);
-        out[0] = pos[0] + dx * d;
-        out[1] = pos[1] + dz * d;
-        out[2] = pos[2];
-        if (func_800E29A4(type, out, heading, layer)) {
-            return out;
+    for (ring = 1; ring <= 8; ring++) {
+        f32 d = (f32)((grow + 16) * ring);
+        for (t = 0; t < (s32)(sizeof(turns) / sizeof(turns[0])); t++) {
+            s32 angle = (heading - 0x8000 + turns[t]) & 0xFFFF;
+            out[0] = pos[0] + func_8009D4B0(angle) * d;
+            out[1] = pos[1] + func_8009D510(angle) * d;
+            out[2] = pos[2];
+            if (func_800E29A4(type, out, heading, layer)) {
+                return out;
+            }
         }
     }
     return NULL;
@@ -226,7 +229,11 @@ RECOMP_PATCH s32 func_800E4F3C(s32 type, f32* pos, s32 heading, s32 layer, s32 g
         if (type != game_type) {
             pos = find_room(type, game_type, pos, moved, heading, layer);
             if (pos == NULL) {
-                type = game_type; // no room for the pick: the game's own
+                // No room for the pick: the game's own, and say so.
+                if (gang < BTGA_HUMAN_GANGS && gang_has_player(gang) && BTGA_GAME_MODE != 10) {
+                    func_800CA620(gang, "NO ROOM FOR THAT GUN BUDDY", 45);
+                }
+                type = game_type;
                 pos = game_pos;
             }
         }
