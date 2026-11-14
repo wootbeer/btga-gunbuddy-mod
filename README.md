@@ -11,13 +11,15 @@ The game has more gun buddies than the one a normal deploy gives you. A+B
 from four other types. This mod lets you choose, in the Mods menu:
 
 - **Gun Buddy**: what a normal deploy puts down.
-  - **Game's Own** (default): the usual one.
-  - **Type 0, Type 1, Type 2, Type 4**: the four types A+B mixes. Type 1
-    comes up out of the ground right away; the others drop in, like the
-    usual one.
-  - **Random**: a different one of the four each time, like A+B.
+  - **Normal** (default): the small double cannon.
+  - **Pop-Up Gun**: comes up out of the ground right away.
+  - **Floating Cannon**: a single cannon.
+  - **Quad Cannon**: the big four-barrel one. It needs a lot more room than
+    the others, so it can land further from your tank. If there's no room
+    anywhere near, you get the normal one and a "NO ROOM" message.
+  - **Random**: one of A+B's mix each time.
 - **Cycle Button** (default L): press it in game to step through Normal,
-  Type 0, 1, 2, 4 and Random. Each player has their own pick, starting from
+  Pop-Up Gun, Floating Cannon, Quad Cannon and Random. Each player has their own pick, starting from
   the Gun Buddy option, and a message (like the pickup ones) says which one
   you're on. Changing Gun Buddy in the Mods menu puts everyone back on it.
   Pick a button your controls don't use. The game treats the D-pad and the
@@ -28,9 +30,6 @@ from four other types. This mod lets you choose, in the Mods menu:
   Gun Buddy** (every one in the grid is your pick).
 - **Applies To**: **Players** (default: gangs with a human player in them,
   so AI tanks in your gang too) or **Everyone** (AI gangs as well).
-
-The types are named by number until each one is matched to its model in
-game (see NOTES.md).
 
 ## How to install
 1. Get `btga_gunbuddy_mod.nrm` from Releases, or from the Build action's

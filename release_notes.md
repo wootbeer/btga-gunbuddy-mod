@@ -1,6 +1,10 @@
 ## Gun Buddy Select 0.2.0
 
-**Cycle Button** (default L): press it in game to step through the gun buddies (Normal, Type 0, 1, 2, 4, Random). Each player has their own pick, and a message says which one you're on. Pick a button your controls don't use, or turn it Off.
+**Named gun buddies:** Normal (small double cannon), Pop-Up Gun, Floating Cannon, Quad Cannon and Random. The choices changed, so check the Gun Buddy option after updating.
+
+**Quad Cannon fix:** it needs much more room than the others, and 0.1.1 didn't look far enough, so it came out as the normal gun buddy. It now looks further out and to the sides, and says "NO ROOM" when it gives you the normal one.
+
+**Cycle Button** (default L): press it in game to step through the gun buddies. Each player has their own pick, and a message says which one you're on. Pick a button your controls don't use, or turn it Off.
 
 ### 0.1.1
 

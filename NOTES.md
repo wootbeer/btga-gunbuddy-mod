@@ -29,18 +29,15 @@ types (the table runs into the level names after type 5). Model ids at
 
 | Type | Models | Used by |
 |---|---|---|
-| 0 | 0x98, 0x99, 0x9A | A+B mix |
-| 1 | 0x71, 0x72, 0x73 | A+B mix; made at once (no drop) |
-| 2 | 0xB3, 0xB4 | A+B mix |
+| 0 | 0x98, 0x99, 0x9A | A+B mix: small double cannon (looks like type 5) |
+| 1 | 0x71, 0x72, 0x73 | A+B mix: pop-up gun; made at once (no drop) |
+| 2 | 0xB3, 0xB4 | A+B mix: floating single cannon |
 | 3 | 0xCA | two put on a tank when it's made, if its tank type has flag 0x80 (0x8008B55C): only the three boss tanks (types 12-14) |
-| 4 | 0xCE | A+B mix; most health |
-| 5 | 0x98, 0x99, 0x9A | normal deploy (type 0's models, other stats) |
+| 4 | 0xCE | A+B mix: big quad cannon; most health |
+| 5 | 0x98, 0x99, 0x9A | normal deploy: small double cannon (type 0's models, other stats) |
 
-Checked in game: Type 0 looks like the normal one (same models). Types 1 and 2 look different. Not yet checked: which type is the double-barreled one and which one
-hides. Guesses from the code: type 1 hides (it's made at once, so it can't
-drop in, and it has extra timing fields at +0x30); type 4 is the big
-four-barrel one (one model and two muzzle offsets at +0x3C, which the game
-mirrors left and right when it fires, `func_800E2F9C`).
+Matched in game (0.2.0 test build). The mod doesn't offer type 0, which
+looks the same as the normal one.
 
 Type 3 is left out: it's only ever mounted on a tank, never put on the
 ground.

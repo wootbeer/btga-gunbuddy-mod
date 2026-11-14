@@ -17,13 +17,14 @@
 #include "btga.h"
 
 // "deploy_type" option, in mod.toml's order.
+// Type 0 isn't offered: it's the normal gun buddy's look (same models) with
+// other stats.
 enum {
-    DEPLOY_GAME,
-    DEPLOY_TYPE_0,
-    DEPLOY_TYPE_1,
-    DEPLOY_TYPE_2,
-    DEPLOY_TYPE_4,
-    DEPLOY_RANDOM,
+    DEPLOY_GAME,     // type 5, small double cannon
+    DEPLOY_POP_UP,   // type 1, pop-up gun
+    DEPLOY_FLOATING, // type 2, floating single cannon
+    DEPLOY_QUAD,     // type 4, big quad cannon
+    DEPLOY_RANDOM,   // 0, 1, 2 or 4, like A+B
 };
 
 // "ab_deploy" option.
@@ -75,10 +76,9 @@ static const u16 cycle_buttons[] = {
 // What the message says for each "deploy_type" choice.
 static const char* const deploy_names[] = {
     "GUN BUDDIES NORMAL",
-    "GUN BUDDIES TYPE 0",
-    "GUN BUDDIES TYPE 1",
-    "GUN BUDDIES TYPE 2",
-    "GUN BUDDIES TYPE 4",
+    "GUN BUDDIES POP UP GUN",
+    "GUN BUDDIES FLOATING CANNON",
+    "GUN BUDDIES QUAD CANNON",
     "GUN BUDDIES RANDOM",
 };
 #define DEPLOY_CHOICES (sizeof(deploy_names) / sizeof(deploy_names[0]))
@@ -155,12 +155,11 @@ static s32 chosen_type(s32 type, u32 gang) {
     }
 
     switch (deploy) {
-        case DEPLOY_TYPE_0: return 0;
-        case DEPLOY_TYPE_1: return 1;
-        case DEPLOY_TYPE_2: return 2;
-        case DEPLOY_TYPE_4: return 4;
-        case DEPLOY_RANDOM: return random_type();
-        default:            return type;
+        case DEPLOY_POP_UP:   return 1;
+        case DEPLOY_FLOATING: return 2;
+        case DEPLOY_QUAD:     return 4;
+        case DEPLOY_RANDOM:   return random_type();
+        default:              return type;
     }
 }
 

@@ -10,8 +10,8 @@ version = "0.2.0"
 display_name = "Gun Buddy Select"
 description = """
 Pick which gun buddy you put down. \
-The game has more gun buddies than the one a normal deploy gives you: \
-A+B puts down a random mix of four others. \
+The game has more gun buddies than the small double cannon a normal deploy gives you: \
+A+B puts down a random mix that also has a pop-up gun, a floating cannon and a big quad cannon. \
 This mod lets a normal deploy put down any of those, and can make A+B put down your pick too. \
 Pick a cycle button to switch between them in game.
 
@@ -47,15 +47,15 @@ additional_files = [ "thumb.png" ]
 [[manifest.config_options]]
 id = "deploy_type"
 name = "Gun Buddy"
-description = "Which gun buddy you put down. Game's Own: the one a normal deploy gives (type 5). Types 0, 1, 2 and 4 are the ones A+B mixes. Type 1 comes up out of the ground right away; the others drop in. Random: a different one of the four each time, like A+B."
+description = "Which gun buddy you put down. Normal: the small double cannon a deploy gives you. Pop-Up Gun: comes up out of the ground. Floating Cannon: a single cannon. Quad Cannon: the big four-barrel one; it needs more room, so it can land further from your tank. Random: one of A+B's mix each time."
 type = "Enum"
-options = [ "Game's Own", "Type 0", "Type 1", "Type 2", "Type 4", "Random" ]
-default = "Game's Own"
+options = [ "Normal", "Pop-Up Gun", "Floating Cannon", "Quad Cannon", "Random" ]
+default = "Normal"
 
 [[manifest.config_options]]
 id = "cycle_button"
 name = "Cycle Button"
-description = "A button that steps you through the gun buddies in game (Normal, Type 0, 1, 2, 4, Random), each player on their own, starting from the Gun Buddy option. A message says which one you're on. Pick a button your controls don't use: this game treats the D-pad and the C buttons as the same buttons, so a D-pad button also does what its C button does. In the recomp's controls you can put the N64 button on any spare button or key."
+description = "A button that steps you through the gun buddies in game (Normal, Pop-Up Gun, Floating Cannon, Quad Cannon, Random), each player on their own, starting from the Gun Buddy option. A message says which one you're on. Pick a button your controls don't use: this game treats the D-pad and the C buttons as the same buttons, so a D-pad button also does what its C button does. In the recomp's controls you can put the N64 button on any spare button or key."
 type = "Enum"
 options = [ "Off", "L", "R", "Z", "D-Pad Up", "D-Pad Down", "D-Pad Left", "D-Pad Right", "C-Up", "C-Down", "C-Left", "C-Right" ]
 default = "L"
