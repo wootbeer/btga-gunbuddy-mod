@@ -217,4 +217,35 @@ s32 func_800B1898(u8* owner, s32 x, s32 z, s32 y, s32 min_x, s32 max_x, s32 min_
 // The game's random number generator (the one A+B's mix uses).
 u32 func_8009D914(void);
 
+// Controllers. Each human gang (0-3) reads one port: the table at
+// 0x80219208 (func_80098250). The pads the controller thread last read are
+// at 0x80219238, 6 bytes a port (an OSContPad: buttons, stick x, stick y,
+// error). The game treats the D-pad as the C buttons and the other way
+// round (func_80098250 ORs each into the other), so a D-pad button also does
+// what its C button does.
+#define BTGA_HUMAN_GANGS      4
+#define BTGA_CONTROLLER_PORTS 4
+#define BTGA_GANG_PORT(gang)  (*(volatile u32*)(0x80219208 + 4 * (u32)(gang)))
+#define BTGA_PAD_BUTTONS(port) (*(volatile u16*)(0x80219238 + 6 * (u32)(port)))
+
+// N64 buttons.
+#define BTN_A      0x8000
+#define BTN_B      0x4000
+#define BTN_Z      0x2000
+#define BTN_START  0x1000
+#define BTN_DUP    0x0800
+#define BTN_DDOWN  0x0400
+#define BTN_DLEFT  0x0200
+#define BTN_DRIGHT 0x0100
+#define BTN_L      0x0020
+#define BTN_R      0x0010
+#define BTN_CUP    0x0008
+#define BTN_CDOWN  0x0004
+#define BTN_CLEFT  0x0002
+#define BTN_CRIGHT 0x0001
+
+// Shows a message to a human gang's player (like "PICKED UP TURBO") for
+// `frames` frames. The text is copied, upper case. Pickups use 45 frames.
+void func_800CA620(s32 gang, const char* text, s32 frames);
+
 #endif

@@ -4,7 +4,7 @@
 
 id = "btga_gunbuddy_mod"
 
-version = "0.1.1"
+version = "0.2.0"
 
 # Shown in the Mods menu.
 display_name = "Gun Buddy Select"
@@ -12,7 +12,8 @@ description = """
 Pick which gun buddy you put down. \
 The game has more gun buddies than the one a normal deploy gives you: \
 A+B puts down a random mix of four others. \
-This mod lets a normal deploy put down any of those, and can make A+B put down your pick too.
+This mod lets a normal deploy put down any of those, and can make A+B put down your pick too. \
+Pick a cycle button to switch between them in game.
 
 https://github.com/wootbeer/btga-gunbuddy-mod"""
 short_description = "Pick which gun buddy you put down."
@@ -50,6 +51,14 @@ description = "Which gun buddy you put down. Game's Own: the one a normal deploy
 type = "Enum"
 options = [ "Game's Own", "Type 0", "Type 1", "Type 2", "Type 4", "Random" ]
 default = "Game's Own"
+
+[[manifest.config_options]]
+id = "cycle_button"
+name = "Cycle Button"
+description = "A button that steps you through the gun buddies in game (Normal, Type 0, 1, 2, 4, Random), each player on their own, starting from the Gun Buddy option. A message says which one you're on. Pick a button your controls don't use: this game treats the D-pad and the C buttons as the same buttons, so a D-pad button also does what its C button does. In the recomp's controls you can put the N64 button on any spare button or key."
+type = "Enum"
+options = [ "Off", "L", "R", "Z", "D-Pad Up", "D-Pad Down", "D-Pad Left", "D-Pad Right", "C-Up", "C-Down", "C-Left", "C-Right" ]
+default = "L"
 
 [[manifest.config_options]]
 id = "ab_deploy"

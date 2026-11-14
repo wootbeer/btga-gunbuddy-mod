@@ -1,4 +1,8 @@
-## Gun Buddy Select 0.1.1
+## Gun Buddy Select 0.2.0
+
+**Cycle Button** (default L): press it in game to step through the gun buddies (Normal, Type 0, 1, 2, 4, Random). Each player has their own pick, and a message says which one you're on. Pick a button your controls don't use, or turn it Off.
+
+### 0.1.1
 
 **Fix:** a bigger gun buddy than the usual one (Type 4, and Type 4 from Random) didn't fit at the usual spot right behind your tank, so the deploy used your ammo and put nothing down. It now goes further back, and if there's still no room you get the usual gun buddy.
 

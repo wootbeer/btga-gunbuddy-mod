@@ -16,6 +16,14 @@ from four other types. This mod lets you choose, in the Mods menu:
     comes up out of the ground right away; the others drop in, like the
     usual one.
   - **Random**: a different one of the four each time, like A+B.
+- **Cycle Button** (default L): press it in game to step through Normal,
+  Type 0, 1, 2, 4 and Random. Each player has their own pick, starting from
+  the Gun Buddy option, and a message (like the pickup ones) says which one
+  you're on. Changing Gun Buddy in the Mods menu puts everyone back on it.
+  Pick a button your controls don't use. The game treats the D-pad and the
+  C buttons as the same buttons, so a D-pad button also does what its C
+  button does. In the recomp's controls you can put the N64 button you pick
+  on any spare button or key. **Off** turns it off.
 - **A+B Deploy**: **Mixed** (default, the game's random mix) or **Same as
   Gun Buddy** (every one in the grid is your pick).
 - **Applies To**: **Players** (default: gangs with a human player in them,

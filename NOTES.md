@@ -59,3 +59,19 @@ bigger type further from the tank (heading - 0x8000 points from the tank to
 the spot) by the difference plus 8, up to three times, and puts down the
 game's own type if it still doesn't fit. Sizes: types 0, 2, 5: 0x24; type 1:
 0x1E; type 3: 0x05; type 4: 0x64.
+
+## Controllers and messages (the cycle button)
+- `func_80098250(gang)` gives the tank code a player's buttons. The port is
+  `*(u32*)(0x80219208 + 4 * gang)`; the pad the controller thread last read
+  is at `0x80219238 + 6 * port` (OSContPad), last frame's at
+  `0x80219218 + 6 * port`. It ORs the D-pad into the C buttons and the C
+  buttons into the D-pad, so the game sees them as one set.
+- Which button does what isn't fixed: each player's actions are button masks
+  in their gang (+0x16C, +0x170, +0x19C, +0x1A0, ...), from the controller
+  setup picked in the options. So the mod lets the player pick the button.
+- `func_800CA620(gang, text, frames)` queues a message for a human gang's
+  player (up to 4, separated by '<' in its buffer at 0x803A5DA4, 0x98 bytes a
+  player); it copies the text. Pickups call it with 45 frames, except in
+  game mode 10.
+- The mod checks the button in a hook on `func_8007A0A0` (once a frame), with
+  its own copy of last frame's buttons.

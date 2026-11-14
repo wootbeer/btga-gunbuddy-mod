@@ -60,9 +60,88 @@ static s32 gang_has_player(u32 gang) {
     return 0;
 }
 
+// ---------------------------------------------------------------------------
+// The cycle button: each player can step through the gun buddies in game.
+
+// "cycle_button" option, in mod.toml's order, and the N64 button for each.
+static const u16 cycle_buttons[] = {
+    0,                                    // Off
+    BTN_L, BTN_R, BTN_Z,
+    BTN_DUP, BTN_DDOWN, BTN_DLEFT, BTN_DRIGHT,
+    BTN_CUP, BTN_CDOWN, BTN_CLEFT, BTN_CRIGHT,
+};
+#define CYCLE_BUTTON_COUNT (sizeof(cycle_buttons) / sizeof(cycle_buttons[0]))
+
+// What the message says for each "deploy_type" choice.
+static const char* const deploy_names[] = {
+    "GUN BUDDIES NORMAL",
+    "GUN BUDDIES TYPE 0",
+    "GUN BUDDIES TYPE 1",
+    "GUN BUDDIES TYPE 2",
+    "GUN BUDDIES TYPE 4",
+    "GUN BUDDIES RANDOM",
+};
+#define DEPLOY_CHOICES (sizeof(deploy_names) / sizeof(deploy_names[0]))
+
+// Each human gang's pick (a "deploy_type" index), and the option it started
+// from: when the option is changed in the Mods menu, everyone goes back to it.
+static u8 player_pick[BTGA_HUMAN_GANGS];
+static u32 picks_from = 0xFFFFFFFF;
+// Each controller port's buttons last frame, to act once per press.
+static u16 last_buttons[BTGA_CONTROLLER_PORTS];
+
+static void sync_picks(void) {
+    u32 deploy = recomp_get_config_u32("deploy_type");
+    u32 i;
+    if (deploy != picks_from) {
+        for (i = 0; i < BTGA_HUMAN_GANGS; i++) {
+            player_pick[i] = (u8)deploy;
+        }
+        picks_from = deploy;
+    }
+}
+
+// The "deploy_type" choice for a gun buddy of `gang`.
+static u32 deploy_choice(u32 gang) {
+    sync_picks();
+    if (recomp_get_config_u32("cycle_button") != 0 && gang < BTGA_HUMAN_GANGS && gang_has_player(gang)) {
+        return player_pick[gang];
+    }
+    return picks_from;
+}
+
+// Once a frame: a press of the cycle button moves that player to the next
+// gun buddy and says which one it is.
+RECOMP_HOOK("func_8007A0A0")
+void gunbuddy_cycle_on_frame(void) {
+    u32 option = recomp_get_config_u32("cycle_button");
+    u16 button = option < CYCLE_BUTTON_COUNT ? cycle_buttons[option] : 0;
+    u32 gang;
+
+    sync_picks();
+    for (gang = 0; gang < BTGA_HUMAN_GANGS; gang++) {
+        u32 port = BTGA_GANG_PORT(gang);
+        u16 now, pressed;
+        if (port >= BTGA_CONTROLLER_PORTS) {
+            continue;
+        }
+        now = BTGA_PAD_BUTTONS(port);
+        pressed = now & (u16)~last_buttons[port];
+        last_buttons[port] = now;
+
+        if (button == 0 || !(pressed & button) || !gang_has_player(gang)) {
+            continue;
+        }
+        player_pick[gang] = (u8)((player_pick[gang] + 1) % DEPLOY_CHOICES);
+        if (BTGA_GAME_MODE != 10) { // the game shows no pickup messages in mode 10
+            func_800CA620(gang, deploy_names[player_pick[gang]], 45);
+        }
+    }
+}
+
 // The type this mod puts down instead of `type`, for a gun buddy of `gang`.
 static s32 chosen_type(s32 type, u32 gang) {
-    u32 deploy = recomp_get_config_u32("deploy_type");
+    u32 deploy = deploy_choice(gang);
     s32 from_grid = type != GUNBUDDY_TYPE_DEPLOY;
 
     if (deploy == DEPLOY_GAME) {
