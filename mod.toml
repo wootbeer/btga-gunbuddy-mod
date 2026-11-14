@@ -1,0 +1,68 @@
+# Settings for the mod. RecompModTool reads this to make the .nrm file.
+
+[manifest]
+
+id = "btga_gunbuddy_mod"
+
+version = "0.1.0"
+
+# Shown in the Mods menu.
+display_name = "Gun Buddy Select"
+description = """
+Pick which gun buddy you put down. \
+The game has more gun buddies than the one a normal deploy gives you: \
+A+B puts down a random mix of four others. \
+This mod lets a normal deploy put down any of those, and can make A+B put down your pick too.
+
+https://github.com/wootbeer/btga-gunbuddy-mod"""
+short_description = "Pick which gun buddy you put down."
+
+authors = [ "wootbeer" ]
+
+game_id = "btga"
+
+minimum_recomp_version = "0.1.8"
+
+dependencies = []
+optional_dependencies = []
+
+native_libraries = []
+
+[inputs]
+
+elf_path = "build/mod.elf"
+
+mod_filename = "btga_gunbuddy_mod"
+
+func_reference_syms_file = "syms/battletanxga.us.rev0.syms.toml"
+data_reference_syms_files = []
+
+additional_files = [ "thumb.png" ]
+
+# Options shown in the Mods menu. Read them with recomp_get_config_u32.
+# The order of each Enum's options matters: src/main.c reads the option's
+# index.
+
+[[manifest.config_options]]
+id = "deploy_type"
+name = "Gun Buddy"
+description = "Which gun buddy you put down. Game's Own: the one a normal deploy gives (type 5). Types 0, 1, 2 and 4 are the ones A+B mixes. Type 1 comes up out of the ground right away; the others drop in. Random: a different one of the four each time, like A+B."
+type = "Enum"
+options = [ "Game's Own", "Type 0", "Type 1", "Type 2", "Type 4", "Random" ]
+default = "Game's Own"
+
+[[manifest.config_options]]
+id = "ab_deploy"
+name = "A+B Deploy"
+description = "What A+B puts down. Mixed: the game's random mix. Same as Gun Buddy: every one is the gun buddy picked above."
+type = "Enum"
+options = [ "Mixed", "Same as Gun Buddy" ]
+default = "Mixed"
+
+[[manifest.config_options]]
+id = "applies_to"
+name = "Applies To"
+description = "Whose gun buddies change. Players: gangs with a human player in them (AI tanks in your gang too). Everyone: AI gangs as well."
+type = "Enum"
+options = [ "Players", "Everyone" ]
+default = "Players"
